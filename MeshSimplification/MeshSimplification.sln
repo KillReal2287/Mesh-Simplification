@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshSimplification", "MeshSimplification\MeshSimplification.csproj", "{012714B5-F770-4649-9E5F-FB35365EBCCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{66FE9F6C-120F-4600-9727-310C1D1936B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{012714B5-F770-4649-9E5F-FB35365EBCCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{012714B5-F770-4649-9E5F-FB35365EBCCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{012714B5-F770-4649-9E5F-FB35365EBCCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{012714B5-F770-4649-9E5F-FB35365EBCCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66FE9F6C-120F-4600-9727-310C1D1936B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66FE9F6C-120F-4600-9727-310C1D1936B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66FE9F6C-120F-4600-9727-310C1D1936B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66FE9F6C-120F-4600-9727-310C1D1936B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

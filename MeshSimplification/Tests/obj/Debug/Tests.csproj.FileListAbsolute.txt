@@ -1,0 +1,11 @@
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/Tests.dll
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/Tests.pdb
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/MeshSimplification.exe
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/nunit.framework.dll
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/MeshSimplification.pdb
+/home/andrey/RiderProjects/MeshSimplification/Tests/bin/Debug/nunit.framework.xml
+/home/andrey/RiderProjects/MeshSimplification/Tests/obj/Debug/Tests.csprojAssemblyReference.cache
+/home/andrey/RiderProjects/MeshSimplification/Tests/obj/Debug/Tests.csproj.CoreCompileInputs.cache
+/home/andrey/RiderProjects/MeshSimplification/Tests/obj/Debug/Tests.csproj.CopyComplete
+/home/andrey/RiderProjects/MeshSimplification/Tests/obj/Debug/Tests.dll
+/home/andrey/RiderProjects/MeshSimplification/Tests/obj/Debug/Tests.pdb

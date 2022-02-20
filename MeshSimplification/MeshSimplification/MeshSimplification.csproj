@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{012714B5-F770-4649-9E5F-FB35365EBCCE}</ProjectGuid>
+        <OutputType>Exe</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>MeshSimplification</RootNamespace>
+        <AssemblyName>MeshSimplification</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="Brahma, Version=1.1.5.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.Agents, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.Agents.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.AST, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.AST.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.Extensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.Extensions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.Printer, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.Printer.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.Translator, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.Translator.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.FSharp.OpenCL.TypeProvider, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.FSharp.OpenCL.TypeProvider.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.Helpers, Version=1.1.5.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.Helpers.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Brahma.OpenCL, Version=1.1.5.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Brahma.FSharp.1.1.5\lib\net45\Brahma.OpenCL.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\FSharp.Core.3.0.2\lib\net40\FSharp.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="FSharp.Quotations.Evaluator, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\FSharp.Quotations.Evaluator.1.0\lib\net40\FSharp.Quotations.Evaluator.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="FSharpx.Collections, Version=1.15.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\FSharpx.Collections.1.15.0\lib\net40\FSharpx.Collections.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="OpenCL.Net, Version=2.2.9.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\OpenCL.Net.2.2.9.0\lib\net40\OpenCL.Net.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Xml" />
+        <Reference Include="W8A.P.C.X, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Windows8Accelerator.1.0.30\lib\portable-net45+wp8+win8\W8A.P.C.X.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="YC.PrettyPrinter, Version=0.0.5.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\YC.PrettyPrinter.0.0.5\lib\net40\YC.PrettyPrinter.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Algorithms\BoundBoxAABB.cs" />
+        <Compile Include="Algorithms\BoundBoxOOB.cs" />
+        <Compile Include="Algorithms\EdgeContraction.cs" />
+        <Compile Include="Algorithms\FaceContraction.cs" />
+        <Compile Include="Algorithms\FaceContraction??.cs" />
+        <Compile Include="Algorithms\MyAlgorithm.cs" />
+        <Compile Include="makeUselessVertices.cs" />
+        <Compile Include="Program.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Readers\Exporter\ExporterPly.cs" />
+        <Compile Include="Readers\Importer\ImporterPly.cs" />
+        <Compile Include="rmUselessVertices.cs" />
+        <Compile Include="Types\Edge.cs" />
+        <Compile Include="Types\Element.cs" />
+        <Compile Include="Types\Face.cs" />
+        <Compile Include="Types\Mesh.cs" />
+        <Compile Include="Types\Model.cs" />
+        <Compile Include="Types\Property.cs" />
+        <Compile Include="Types\Vertex.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="OpenCL.Net.dll.config" />
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets" Condition="Exists('..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets')" />
+    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <PropertyGroup>
+        <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+      </PropertyGroup>
+      <Error Condition="!Exists('..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets'))" />
+    </Target>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
