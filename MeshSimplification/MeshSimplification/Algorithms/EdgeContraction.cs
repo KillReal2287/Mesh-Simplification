@@ -1,9 +1,5 @@
-// переписать нормально
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using MeshSimplification.Types;
 
@@ -23,7 +19,6 @@ namespace MeshSimplification.Algorithms {
 
             foreach (Mesh mesh in model.Meshes) {
                 //CheckThisMesh(mesh);
-                
                 Mesh simple = new Mesh(new List<Vertex>(mesh.Vertices), new List<Vertex>(mesh.Normals),
                     new List<Face>(mesh.Faces), new List<Edge>(mesh.Edges));
                 modelNew.AddMesh(SimplifyMesh(simple));
@@ -108,12 +103,20 @@ namespace MeshSimplification.Algorithms {
                     
                     Vertex newVert = new Vertex((v1.X + v2.X) / 2,
                         (v1.Y + v2.Y) / 2, (v1.Z + v2.Z) / 2);
-
-                    for (int iter = 0; iter < vertices.Count; iter++)
-                        if (vertices[iter].Equals(v1) || vertices[iter].Equals(v2))
-                            vertices[iter] = newVert;
                     
-                    faces.RemoveAll(x => EdgeInFace(edge, x));                    
+                    faces.RemoveAll(x => EdgeInFace(edge, x));
+                    
+                    vertices.Add(newVert);
+                    for (int iter = 0; iter < faces.Count; iter++) {
+                        if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
+                            faces[iter].Vertices[0] = vertices.Count - 1;
+                        
+                        if (faces[iter].Vertices[1] == v1Index || faces[iter].Vertices[1] == v2Index)
+                            faces[iter].Vertices[1] = vertices.Count - 1;
+                        
+                        if (faces[iter].Vertices[2] == v1Index || faces[iter].Vertices[2] == v2Index)
+                            faces[iter].Vertices[2] = vertices.Count - 1;
+                    }
                 }
             }
             
@@ -152,19 +155,6 @@ namespace MeshSimplification.Algorithms {
         }
 
         private static List<Edge> GetEdges(Mesh mesh){
-            /*
-            HashSet<Edge> hashSet = new HashSet<Edge>();
-            foreach (Face f in mesh.Faces) {
-                List<int> vert = new List<int> {f.Vertices[0], f.Vertices[1], f.Vertices[2]};
-                vert.Sort();
-                hashSet.Add(new Edge(vert[0], vert[1]));
-                hashSet.Add(new Edge(vert[0], vert[2]));
-                hashSet.Add(new Edge(vert[1], vert[2]));
-            }
-
-            return hashSet.ToList();
-            */
-
             List<Edge> answer = new List<Edge>();
             List<int> vertDone = new List<int>();
             List<double> length = new List<double>{0, 0, 0};
@@ -189,20 +179,6 @@ namespace MeshSimplification.Algorithms {
                 vertDone.Add(f.Vertices[2]);
             }
             return answer;
-
-            /*
-            List<Edge> answer = new List<Edge>();
-
-            foreach (Face f in mesh.Faces) {
-                if (!IfEdge(new Edge(f.Vertices[0], f.Vertices[1]), answer))
-                    answer.Add(new Edge(f.Vertices[0], f.Vertices[1]));
-                if (!IfEdge(new Edge(f.Vertices[0], f.Vertices[2]), answer))
-                    answer.Add(new Edge(f.Vertices[0], f.Vertices[2]));
-                if (!IfEdge(new Edge(f.Vertices[1], f.Vertices[2]), answer))
-                    answer.Add(new Edge(f.Vertices[1], f.Vertices[2]));
-            }
-            return answer;
-            */
         }
     
         private static double EdgeLength(Mesh mesh, Edge edge) {
@@ -235,8 +211,6 @@ namespace MeshSimplification.Algorithms {
             return maxLength;
         }
 
-
-        
         private static bool EdgeInFace(Edge edge, Face face) {
             return face.Vertices.Exists(x => x == edge.Vertex1) && 
                    face.Vertices.Exists(x => x == edge.Vertex2);
@@ -247,55 +221,36 @@ namespace MeshSimplification.Algorithms {
             List <Face> faces = mesh.Faces;
             int before = mesh.Faces.Count;
             int v1Index, v2Index;
-
-            /*
-             * UPD:
-             * идея на данный момент чтобы не потерять измененные вместе вершины мы точно знаем
-             * что у них одинаковые координаты и теперь чтобы при изменении одной вершины
-             * попутно менялись вершины которые ранее были связаны с ней мы можем
-             * пробегаться по массиву вершин и смотреть если у них одинаковые значения
-             * значит меняем их
-             *
-             * но на некоторых моделях он снова создает разрывы объяснения этому
-             * я не могу найти никак ведь с кроликом где очень много вершин
-             * никаких новых разрывов не появляется единственное что может
-             * произойти это старые разрывы могут увеличиться или сместиться
-            */
-            //List<int> simplified = new List<int>();
-
+            
+            int newVertices = 0;
             foreach (Edge edge in edges) {
                 if (EdgeLength(mesh, edge) < ratio * longest) {
                     v1Index = edge.Vertex1;
                     v2Index = edge.Vertex2;
                     
-                    /*
-                    if (simplified.Exists(x => x == v1Index || x == v2Index))
-                        continue;
-                    simplified.Add(v1Index);
-                    simplified.Add(v2Index);
-                    */
-
-
                     Vertex v1 = vertices[v1Index];
                     Vertex v2 = vertices[v2Index];
-                    
-                    //vertices.Remove(v1);
-                    //vertices.Remove(v2);
-                    
+
                     Vertex newVert = new Vertex((v1.X + v2.X) / 2,
                         (v1.Y + v2.Y) / 2, (v1.Z + v2.Z) / 2);
-
-                    for (int iter = 0; iter < vertices.Count; iter++)
-                        if (vertices[iter].Equals(v1) || vertices[iter].Equals(v2))
-                            vertices[iter] = newVert;
                     
-                    //vertices[v1Index] = newVert;
-                    //vertices[v2Index] = newVert;
-
                     faces.RemoveAll(x => EdgeInFace(edge, x));
+                    
+                    vertices.Add(newVert);
+                    newVertices += 1;
+                    for (int iter = 0; iter < faces.Count; iter++) {
+                        if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
+                            faces[iter].Vertices[0] = vertices.Count - 1;
+                        
+                        if (faces[iter].Vertices[1] == v1Index || faces[iter].Vertices[1] == v2Index)
+                            faces[iter].Vertices[1] = vertices.Count - 1;
+                        
+                        if (faces[iter].Vertices[2] == v1Index || faces[iter].Vertices[2] == v2Index)
+                            faces[iter].Vertices[2] = vertices.Count - 1;
+                    }
                 }
             }
-
+            //Console.WriteLine("New vertices: {0}", newVertices);
 
             Console.WriteLine("Stat:");
             Console.WriteLine("faces before: {0}", before);
@@ -306,13 +261,3 @@ namespace MeshSimplification.Algorithms {
         }
     }
 }
-
-/*
- * проблемы алгоритма на данный момент
- * 1. удаляются только ребра и грани в которых есть эти ребра, не удаляются ненужные вершины
- * 2. удаляется не все что нужно я сделал так специально чтобы модель оставалась цельной иначе если
- * я буду удалять все что нужно у меня будут сильные разрывы т.е. сейчас смотрится один раз
- * если с текущей вершиной уже было упрощение то мы не упрощаем возможно одна из причин возникновения
- * разрывов это неудаление вершин
- * короче есть ещё над чем подумать чтобы довести этот алгоритм до идеала
- */

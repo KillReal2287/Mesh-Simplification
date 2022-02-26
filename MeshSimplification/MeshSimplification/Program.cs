@@ -30,7 +30,7 @@ namespace MeshSimplification{
             stopWatch.Start();
 
             //Model simple = figure;
-            Model simple = edgeContraction.Simplify(figure, 0.1);
+            Model simple = edgeContraction.Simplify(figure, 1.1);
             //Model simple = edgeContraction.Simplify(figure);
             //Model simple = faceContraction.Simplify(figure, 0.02);
             //Model simple = myAlgorithm.Simplify(figure, 0.56);
