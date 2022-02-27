@@ -12,14 +12,9 @@ namespace MeshSimplification{
             TimeSpan ts;
             string elapsedTime;
             string path = @"/home/andrey/Downloads/help/ascii/hind.ply";
-
-            EdgeContraction edgeContraction = new EdgeContraction();
-            FaceContraction faceContraction = new FaceContraction();
-            MyAlgorithm myAlgorithm = new MyAlgorithm();
-
+            
             rmUselessVertices rm = new rmUselessVertices();
-            
-            
+
             ImporterPly importer = new ImporterPly();
             ExporterPly exporterPly = new ExporterPly();
             
@@ -29,11 +24,10 @@ namespace MeshSimplification{
             
             stopWatch.Start();
 
-            //Model simple = figure;
-            Model simple = edgeContraction.Simplify(figure, 1.1);
-            //Model simple = edgeContraction.Simplify(figure);
-            //Model simple = faceContraction.Simplify(figure, 0.02);
-            //Model simple = myAlgorithm.Simplify(figure, 0.56);
+            //Algorithm algorithm = new VertexCollapsingInRadius(figure, 0.1);
+            Algorithm algorithm = new EdgeContraction(figure, 0.7);
+            
+            Model simple = algorithm.GetSimplifiedModel();
             
             stopWatch.Stop();
 
