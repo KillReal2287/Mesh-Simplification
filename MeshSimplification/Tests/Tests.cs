@@ -19,7 +19,7 @@ namespace Tests{
             Model simple = faceContraction.Simplify(figure, 0.2);
             Model box = boundBoxAABB.Simplify(figure);
             Model boxSimple = boundBoxAABB.Simplify(simple);
-            
+
             //check count of meshes
             Assert.AreEqual(figure.Meshes.Count, simple.Meshes.Count);
 
@@ -36,13 +36,19 @@ namespace Tests{
         
         [Test]
         public void TestEdgeContraction(){
-            EdgeContraction edgeContraction = new EdgeContraction();
+
+            
+            
             BoundBoxAABB boundBoxAABB = new BoundBoxAABB();
             
             ImporterPly importer = new ImporterPly();
             Model figure = importer.Import(path);
+
             
-            Model simple = edgeContraction.Simplify(figure, 0.2);
+            Algorithm algo = new EdgeContraction(figure);
+            Algorithm algorithm = new EdgeContraction(figure);
+            Model simple = algorithm.GetSimplifiedModel();
+
             Model box = boundBoxAABB.Simplify(figure);
             Model boxSimple = boundBoxAABB.Simplify(simple);
             

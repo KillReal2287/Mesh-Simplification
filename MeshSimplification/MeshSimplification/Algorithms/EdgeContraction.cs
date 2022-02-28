@@ -10,28 +10,27 @@ using MeshSimplification.Types;
  */
 
 namespace MeshSimplification.Algorithms {
-    class EdgeContraction : Algorithm{
+    public class EdgeContraction : Algorithm{
         private Model model;
         private Model simplifiedModel;
-        private double ratio;
+        private double ratio = -50;
         
         private static double longest = double.MinValue;
 
-        public override Model GetSimplifiedModel(){
-            return simplifiedModel;
-        }
-
         public EdgeContraction(Model model){
             this.model = model;
-            simplifiedModel = Simplify(model);
         }
         
         public EdgeContraction(Model model, double ratio){
             this.model = model;
             this.ratio = ratio;
-            simplifiedModel = Simplify(model, ratio);
         }
-
+        
+        public override Model GetSimplifiedModel(){
+            simplifiedModel = ratio.Equals(-50) ? Simplify(model) : Simplify(model, ratio);
+            return simplifiedModel;
+        }
+        
         //code based on angles    ↓↓↓
         private Model Simplify(Model model){
             Model modelNew = new Model();

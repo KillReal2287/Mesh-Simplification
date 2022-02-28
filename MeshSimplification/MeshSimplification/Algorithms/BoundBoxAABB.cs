@@ -2,17 +2,28 @@ using System.Collections.Generic;
 using MeshSimplification.Types;
 
 namespace MeshSimplification.Algorithms {
-    public class BoundBoxAABB{
-        public Model Simplify(Model model) {
+    public class BoundBoxAABB : Algorithm{
+        private Model model;
+        private Model simplifiedModel;
+
+        public BoundBoxAABB(Model model){
+            this.model = model;
+        }
+        
+        public override Model GetSimplifiedModel(){
+            simplifiedModel = Simplify(model);
+            return simplifiedModel;
+        }
+        
+        public Model Simplify(Model model){
             Model modelNew = new Model();
 
             foreach (Mesh m in model.Meshes) {
                 modelNew.AddMesh(SimplifyMesh(m));
             }
-
             return modelNew;
         }
-        
+
         private Mesh SimplifyMesh(Mesh mesh) {
             double minX = double.MaxValue, minY = double.MaxValue, minZ = double.MaxValue;
             double maxX = double.MinValue, maxY = double.MinValue, maxZ = double.MinValue;

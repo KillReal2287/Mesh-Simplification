@@ -11,7 +11,7 @@ namespace MeshSimplification{
             Stopwatch stopWatch = new Stopwatch();
             TimeSpan ts;
             string elapsedTime;
-            string path = @"/home/andrey/Downloads/help/ascii/hind.ply";
+            string path = @"/home/andrey/Downloads/help/ascii/bunny.ply";
             
             rmUselessVertices rm = new rmUselessVertices();
 

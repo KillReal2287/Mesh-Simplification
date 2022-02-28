@@ -7,9 +7,22 @@ using MeshSimplification.Types;
  * this algorithm chooses which face should be deleted
  * based only on it square
  */
-
 namespace MeshSimplification.Algorithms{
-    public class FaceContraction{ 
+    class FaceContraction : Algorithm{ 
+        private Model model;
+        private Model simplifiedModel;
+        private double ratio;
+        
+        public FaceContraction(Model model, double ratio){
+            this.model = model;
+            this.ratio = ratio;
+        }
+        
+        public override Model GetSimplifiedModel(){
+            simplifiedModel = Simplify(model, ratio);
+            return simplifiedModel;
+        }
+
         public Model Simplify(Model model, double ratio) {
             Model modelNew = new Model();
 

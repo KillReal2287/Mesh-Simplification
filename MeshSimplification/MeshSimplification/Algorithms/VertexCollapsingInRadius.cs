@@ -20,7 +20,9 @@ namespace MeshSimplification.Algorithms{
             simplifiedModel = ModelRefactor();
         }
 
-        public override Model GetSimplifiedModel() { return simplifiedModel; }
+        public override Model GetSimplifiedModel(){
+            return simplifiedModel;
+        }
 
         private Model ModelRefactor(){
             Model modelAfterAlgorithm = new Model();
