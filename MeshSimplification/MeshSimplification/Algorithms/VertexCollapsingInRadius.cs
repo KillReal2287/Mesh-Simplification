@@ -4,7 +4,6 @@ using System.Linq;
 using MeshSimplification.Types;
 
 namespace MeshSimplification.Algorithms{
-    //Collapsing a Vertex in a Radius
     class VertexCollapsingInRadius : Algorithm{
         private Model model;
         private Double simplificationCoefficient;
@@ -52,7 +51,7 @@ namespace MeshSimplification.Algorithms{
                 } 
                 RefactorIncidental(incidental, v, currentdel);
             }
-            return new Mesh(base.VerticesNormalaze(mesh.Vertices, simplifiedFaces), new List<Vertex>(), simplifiedFaces, new List<Edge>());
+            return new Mesh(VerticesNormalaze(mesh.Vertices, simplifiedFaces), new List<Vertex>(), simplifiedFaces, new List<Edge>());
         }
         
         
@@ -81,10 +80,8 @@ namespace MeshSimplification.Algorithms{
                     simplifiedFaces.Remove(face);
                     if (!face.Vertices.Contains(v) || face.Vertices.Count > 3) {
                         List<int> ver = face.Vertices;
-                        //Console.WriteLine(ver);
                         ver.Remove(v1);
                         ver.Add(v);
-                        ver = new List<int>(ver.GroupBy(x => x).Select(x => x.First()));
                         simplifiedFaces.Add(new Face(ver.Count,ver));
                     }
                 }
