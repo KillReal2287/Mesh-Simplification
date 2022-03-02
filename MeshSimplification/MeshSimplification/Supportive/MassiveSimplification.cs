@@ -21,7 +21,7 @@ public class MassiveSimplification
         this.pathIn = pathIn;
         this.pathOut = pathOut;
         Console.WriteLine(Directory.GetCurrentDirectory());
-        //exportModels(getRefactorModels(getModels(), getAlgorithmsTypes(getAlgorithmNames())),getAlgorithmNames(), getModelsNames());
+        exportModels(getRefactorModels(getModels(), getAlgorithmsTypes(getAlgorithmNames())),getAlgorithmNames(), getModelsNames());
     }
 
     private List<String> getAlgorithmNames()
