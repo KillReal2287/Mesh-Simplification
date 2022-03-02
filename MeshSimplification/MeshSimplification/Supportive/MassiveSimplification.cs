@@ -3,7 +3,7 @@ using Exporter;
 using Importer;
 using Types;
 
-namespace MeshSimplification.Supportive;
+namespace MeshSimplification.Algorithms;
 
 public class MassiveSimplification
 {
@@ -20,27 +20,22 @@ public class MassiveSimplification
         this.algorithmsLocation = algorithmsLocation;
         this.pathIn = pathIn;
         this.pathOut = pathOut;
-        Console.WriteLine(Directory.GetCurrentDirectory());
         exportModels(getRefactorModels(getModels(), getAlgorithmsTypes(getAlgorithmNames())),getAlgorithmNames(), getModelsNames());
     }
 
     private List<String> getAlgorithmNames()
     {
         List<String> algorithmsNames = new List<string>();
-        String[] words;
-        
-        foreach (String s in Directory.GetFiles(algorithmsLocation))
-        {
-            words = s.Split('\\', '/', '.');
-            if(!words[words.Length-2].Equals("Algorithm")) algorithmsNames.Add(words[words.Length-2]);
-        }
 
+        foreach (String s in Directory.GetFiles(algorithmsLocation)) if(Path.GetFileNameWithoutExtension(s).Equals("VertexCollapsingInRadius")) algorithmsNames.Add(Path.GetFileNameWithoutExtension(s));
+        
         return algorithmsNames;
     }
 
     private List<Type> getAlgorithmsTypes(List<String> algorithmsNames)
     {
         List<Type> algorithmsTypes = new List<Type>();
+        
         foreach (String s in algorithmsNames) algorithmsTypes.Add(assembly.GetType("MeshSimplification.Algorithms" + s));
 
         return algorithmsTypes;
@@ -59,11 +54,8 @@ public class MassiveSimplification
     private List<String> getModelsNames()
     {
         List<String> modelsNames = new List<string>();
-        foreach (String path in getFiles())
-        {
-            String[] tmp = path.Split('\\', '/', '.');
-            modelsNames.Add(tmp[tmp.Length - 2]);
-        }
+        
+        foreach (String path in getFiles()) modelsNames.Add(Path.GetFileName(path));
 
         return modelsNames;
     }
@@ -78,17 +70,20 @@ public class MassiveSimplification
         foreach (Type type in algorithmsTypes)
         {
             var obj = Activator.CreateInstance(type, model);
-            var method = type.GetMethod("GetSimplifiedModel");
-            refactorModels.Add(method.Invoke(obj, new object[] {}) as Model);
+            refactorModels.Add(type.GetMethod("GetSimplifiedModel").Invoke(obj, new object[] {}) as Model);
         }
 
         return refactorModels;
     }
-
     private void exportModels(List<Model> refactorModels, List<String> algorithmsNames, List<String> modelNames)
     {
         ExporterPly exporterPly = new ExporterPly();
         int cnt = 0;
-        foreach (Model model in refactorModels) exporterPly.Export(pathOut + algorithmsNames[cnt % algorithmsNames.Count] + ": " + modelNames[cnt++ % modelNames.Count]+ ".ply",model, false);
+        foreach (Model model in refactorModels)
+        {
+            String path = pathOut + algorithmsNames[cnt % algorithmsNames.Count];
+            if (! Directory. Exists(path)) Directory. CreateDirectory(path);
+            exporterPly.Export(path + "/" + modelNames[cnt++ % modelNames.Count], model, false);
+        }
     }
 }
