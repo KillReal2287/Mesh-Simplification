@@ -3,8 +3,20 @@ using System.Numerics;
 using MeshSimplification.Types;
 
 namespace MeshSimplification.Algorithms {
-    public class BoundBoxOOB {
-        public Model Simplify(Model model) {
+    class BoundBoxOOB : Algorithm{
+        private Model model;
+        private Model simplifiedModel;
+        
+        public BoundBoxOOB(Model model){
+            this.model = model;
+        }
+        
+        public override Model GetSimplifiedModel(){
+            simplifiedModel = Simplify(model);
+            return simplifiedModel;
+        }
+        
+        public Model Simplify(Model model){
             Model modelNew = new Model();
 
             foreach (Mesh m in model.Meshes) {
@@ -13,7 +25,7 @@ namespace MeshSimplification.Algorithms {
 
             return modelNew;
         }
-        
+
         private Mesh SimplifyMesh(Mesh mesh) {
             double volume = double.MaxValue;
 

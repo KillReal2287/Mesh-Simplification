@@ -3,26 +3,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using MeshSimplification.Types;
 
-/*
- * this algorithm chooses which face should be deleted
- * based only on it square
- */
 namespace MeshSimplification.Algorithms{
-    class FaceContraction : Algorithm{ 
-        private Model model;
-        private Model simplifiedModel;
-        private double ratio;
-        
-        public FaceContraction(Model model, double ratio){
-            this.model = model;
-            this.ratio = ratio;
-        }
-        
-        public override Model GetSimplifiedModel(){
-            simplifiedModel = Simplify(model, ratio);
-            return simplifiedModel;
-        }
-
+    public class Angles{
         public Model Simplify(Model model, double ratio) {
             Model modelNew = new Model();
 
@@ -38,7 +20,7 @@ namespace MeshSimplification.Algorithms{
             
             return deletedFaces;
         }
-        
+
         private static double FindBiggestArea(Mesh mesh) {
             double maxArea = double.MinValue;
 
