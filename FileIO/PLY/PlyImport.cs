@@ -5,193 +5,193 @@ using System.Text;
 using System.Globalization;
 using MeshSimplification.Types;
 
-namespace MeshSimplification.FileIO.PLY {
-    internal class PlyImport {
-        private string _format;
-        
-        internal Model Import(string fileName) {
-            Model model = new Model();
+namespace MeshSimplification.FileIO.PLY;
 
-            try {
-                using (StreamReader reader = new StreamReader(fileName, Encoding.ASCII)) {
-                    CultureInfo info = CultureInfo.CurrentCulture;
+internal class PlyImport {
+    private string _format;
+    
+    internal Model Import(string fileName) {
+        Model model = new Model();
 
-                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+        try {
+            using (StreamReader reader = new StreamReader(fileName, Encoding.ASCII)) {
+                CultureInfo info = CultureInfo.CurrentCulture;
 
-                    List<string> header = ReadHeader(reader);
-                    List<Element> elems = ParseHeader(header);
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-                    if (_format.Equals("ascii")) {
-                        model = ReadAscii(reader, elems);
-                    }
-                    else if (_format.Equals("binary_little_endian") || _format.Equals("binary_big_endian")) {
-                        /* ReadBinary in development */
-                    }
+                List<string> header = ReadHeader(reader);
+                List<Element> elems = ParseHeader(header);
 
-                    Thread.CurrentThread.CurrentCulture = info;
+                if (_format.Equals("ascii")) {
+                    model = ReadAscii(reader, elems);
                 }
-            }
-            catch (Exception e) {
-                Console.Error.WriteLine("Reading file \"{0}\" failed: {1}", fileName, e.Message);
-            }
-
-            return model;
-        }
-        
-        private List<string> ReadHeader(StreamReader reader) {
-            List<string> header = new List<string>();
-            string line;
-
-            while ((line = reader.ReadLine()) != null) {
-                header.Add(line);
-                if (line.Equals("end_header"))
-                    break;
-            }
-            
-            return header;
-        }
-        
-        private List<Element> ParseHeader(List<string> header) {
-            if (header == null || header.Count < 1 || !header[0].Equals("ply"))
-                throw new ArgumentException();
-
-            List<Element> elements = new List<Element>();
-
-            foreach (string line in header) {
-                string[] words = line.Split(" ");
-
-                if (words.Length > 0) {
-                    switch (words[0]) {
-                        case "element":
-                            if (words.Length < 3)
-                                throw new DataException("Incorrect <element> line");
-                            int count = Convert.ToInt32(words[2]);
-                            elements.Add(new Element(words[1], count));
-                            break;
-                        
-                        case "property":
-                            if (words.Length >= 5 && words[1].Equals("list")) {
-                                elements[elements.Count - 1].Properties.
-                                    Add(new Property(words[4], false, words[2], words[3]));
-                            }
-                            else if (words.Length >= 3) {
-                                elements[elements.Count - 1].Properties.
-                                    Add(new Property(words[2], false, words[1]));
-                            }
-                            else
-                                throw new DataException("Incorrect <property> line");
-                            break;
-                        
-                        case "format":
-                            if (words.Length < 3)
-                                throw new DataException("Incorrect <format> line");
-                            _format = words[1];
-                            break;
-                        
-                        case "ply":
-                        case "comment":
-                        case "end_header":
-                            break;
-                        
-                        default:
-                            throw new DataException("Met unknown keyword in header");
-                    }
+                else if (_format.Equals("binary_little_endian") || _format.Equals("binary_big_endian")) {
+                    /* ReadBinary in development */
                 }
+
+                Thread.CurrentThread.CurrentCulture = info;
             }
+        }
+        catch (Exception e) {
+            Console.Error.WriteLine("Reading file \"{0}\" failed: {1}", fileName, e.Message);
+        }
 
-            if (_format == null ||
-                !(_format.Equals("ascii") ||
-                _format.Equals("binary_little_endian") ||
-                _format.Equals("binary_big_endian")))
-                throw new DataException("Missing <format> keyword");
+        return model;
+    }
+    
+    private List<string> ReadHeader(StreamReader reader) {
+        List<string> header = new List<string>();
+        string line;
 
-            return elements;
+        while ((line = reader.ReadLine()) != null) {
+            header.Add(line);
+            if (line.Equals("end_header"))
+                break;
         }
         
-        private Model ReadAscii(StreamReader reader, List<Element> elems) {
-            Mesh mesh = new Mesh();
+        return header;
+    }
+    
+    private List<Element> ParseHeader(List<string> header) {
+        if (header == null || header.Count < 1 || !header[0].Equals("ply"))
+            throw new ArgumentException();
 
-            foreach (Element e in elems) {
-                switch (e.Name) {
-                    case "vertex": {
-                        int x = e.PropertyIndex("x");
-                        int y = e.PropertyIndex("y");
-                        int z = e.PropertyIndex("z");
+        List<Element> elements = new List<Element>();
 
-                        if (x == -1 || y == -1 || z == -1)
-                            throw new Exception("Missing x, y, or z in vertex");
+        foreach (string line in header) {
+            string[] words = line.Split(" ");
+
+            if (words.Length > 0) {
+                switch (words[0]) {
+                    case "element":
+                        if (words.Length < 3)
+                            throw new DataException("Incorrect <element> line");
+                        int count = Convert.ToInt32(words[2]);
+                        elements.Add(new Element(words[1], count));
+                        break;
                     
-                        int nx = e.PropertyIndex("nx");
-                        int ny = e.PropertyIndex("ny");
-                        int nz = e.PropertyIndex("nz");
+                    case "property":
+                        if (words.Length >= 5 && words[1].Equals("list")) {
+                            elements[elements.Count - 1].Properties.
+                                Add(new Property(words[4], false, words[2], words[3]));
+                        }
+                        else if (words.Length >= 3) {
+                            elements[elements.Count - 1].Properties.
+                                Add(new Property(words[2], false, words[1]));
+                        }
+                        else
+                            throw new DataException("Incorrect <property> line");
+                        break;
                     
-                        bool hasNormals = !(nx == -1 || ny == -1 || nz == -1);
-                        
-                        for (int i = 0; i < e.Count; i++) {
-                            string[] words = reader.ReadLine().Split(" ");
-
-                            if (words.Length >= e.Properties.Count) {
-                                double coordinateX = Convert.ToDouble(words[x]);
-                                double coordinateY = Convert.ToDouble(words[y]);
-                                double coordinateZ = Convert.ToDouble(words[z]);
-                                Vertex v = new Vertex(coordinateX, coordinateY, coordinateZ);
-                            
-                                mesh.AddVertex(v);
-
-                                if (hasNormals) {
-                                    double coordinateNx = Convert.ToDouble(words[nx]);
-                                    double coordinateNy = Convert.ToDouble(words[ny]);
-                                    double coordinateNz = Convert.ToDouble(words[nz]);
-                                    Vertex n = new Vertex(coordinateNx, coordinateNy, coordinateNz);
-                                
-                                    mesh.AddNormal(n);
-                                }
-                            }
-                        }
+                    case "format":
+                        if (words.Length < 3)
+                            throw new DataException("Incorrect <format> line");
+                        _format = words[1];
                         break;
-                    }
-                    case "face": {
-                        for (int i = 0; i < e.Count; i++) {
-                            string[] words = reader.ReadLine().Split(" ");
-
-                            if (words.Length >= e.Properties.Count && words.Length >= 1) {
-                                List<int> vertices = new List<int>();
-                                int count = Convert.ToInt32(words[0]);
-
-                                if (words.Length < count)
-                                    throw new DataException("Missing vertex's index in <face>");
-                            
-                                for (int j = 1; j <= count; j++)
-                                    vertices.Add(Convert.ToInt32(words[j]));
-
-                                mesh.AddFace(new Face(count, vertices));
-                            }
-                        }
+                    
+                    case "ply":
+                    case "comment":
+                    case "end_header":
                         break;
-                    }
-                    case "edge": {
-                        for (int j = 0; j < e.Count; j++) {
-                            string[] words = reader.ReadLine().Split(" ");
-                            
-                            if (words.Length >= e.Properties.Count && words.Length >= 2) {
-                                int vertex1 = Convert.ToInt32(words[0]);
-                                int vertex2 = Convert.ToInt32(words[1]);
-                                mesh.AddEdge(new Edge(vertex1, vertex2));
-                            }
-                        }
-                        break;
-                    }
+                    
                     default:
-                        for (int i = 0; i < e.Count; i++)
-                            reader.ReadLine();
-                        break;
-                    }
+                        throw new DataException("Met unknown keyword in header");
+                }
             }
-
-            Model model = new Model();
-            model.AddMesh(mesh);
-            
-            return model;
         }
+
+        if (_format == null ||
+            !(_format.Equals("ascii") ||
+            _format.Equals("binary_little_endian") ||
+            _format.Equals("binary_big_endian")))
+            throw new DataException("Missing <format> keyword");
+
+        return elements;
+    }
+    
+    private Model ReadAscii(StreamReader reader, List<Element> elems) {
+        Mesh mesh = new Mesh();
+
+        foreach (Element e in elems) {
+            switch (e.Name) {
+                case "vertex": {
+                    int x = e.PropertyIndex("x");
+                    int y = e.PropertyIndex("y");
+                    int z = e.PropertyIndex("z");
+
+                    if (x == -1 || y == -1 || z == -1)
+                        throw new Exception("Missing x, y, or z in vertex");
+                
+                    int nx = e.PropertyIndex("nx");
+                    int ny = e.PropertyIndex("ny");
+                    int nz = e.PropertyIndex("nz");
+                
+                    bool hasNormals = !(nx == -1 || ny == -1 || nz == -1);
+                    
+                    for (int i = 0; i < e.Count; i++) {
+                        string[] words = reader.ReadLine().Split(" ");
+
+                        if (words.Length >= e.Properties.Count) {
+                            double coordinateX = Convert.ToDouble(words[x]);
+                            double coordinateY = Convert.ToDouble(words[y]);
+                            double coordinateZ = Convert.ToDouble(words[z]);
+                            Vertex v = new Vertex(coordinateX, coordinateY, coordinateZ);
+                        
+                            mesh.AddVertex(v);
+
+                            if (hasNormals) {
+                                double coordinateNx = Convert.ToDouble(words[nx]);
+                                double coordinateNy = Convert.ToDouble(words[ny]);
+                                double coordinateNz = Convert.ToDouble(words[nz]);
+                                Vertex n = new Vertex(coordinateNx, coordinateNy, coordinateNz);
+                            
+                                mesh.AddNormal(n);
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "face": {
+                    for (int i = 0; i < e.Count; i++) {
+                        string[] words = reader.ReadLine().Split(" ");
+
+                        if (words.Length >= e.Properties.Count && words.Length >= 1) {
+                            List<int> vertices = new List<int>();
+                            int count = Convert.ToInt32(words[0]);
+
+                            if (words.Length < count)
+                                throw new DataException("Missing vertex's index in <face>");
+                        
+                            for (int j = 1; j <= count; j++)
+                                vertices.Add(Convert.ToInt32(words[j]));
+
+                            mesh.AddFace(new Face(count, vertices));
+                        }
+                    }
+                    break;
+                }
+                case "edge": {
+                    for (int j = 0; j < e.Count; j++) {
+                        string[] words = reader.ReadLine().Split(" ");
+                        
+                        if (words.Length >= e.Properties.Count && words.Length >= 2) {
+                            int vertex1 = Convert.ToInt32(words[0]);
+                            int vertex2 = Convert.ToInt32(words[1]);
+                            mesh.AddEdge(new Edge(vertex1, vertex2));
+                        }
+                    }
+                    break;
+                }
+                default:
+                    for (int i = 0; i < e.Count; i++)
+                        reader.ReadLine();
+                    break;
+                }
+        }
+
+        Model model = new Model();
+        model.AddMesh(mesh);
+        
+        return model;
     }
 }
