@@ -108,7 +108,8 @@
         <Compile Include="Algorithms\Algorithm.cs" />
         <Compile Include="Algorithms\BoundBoxAABB.cs" />
         <Compile Include="Algorithms\BoundBoxOOB.cs" />
-        <Compile Include="Algorithms\EdgeContraction.cs" />
+        <Compile Include="Algorithms\EdgeContractionAngle.cs" />
+        <Compile Include="Algorithms\EdgeContractionLength.cs" />
         <Compile Include="Algorithms\FaceContraction.cs" />
         <Compile Include="Algorithms\FaceContraction??.cs" />
         <Compile Include="Algorithms\VertexCollapsingInRadius.cs" />

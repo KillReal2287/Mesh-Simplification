@@ -11,7 +11,7 @@ namespace MeshSimplification{
             Stopwatch stopWatch = new Stopwatch();
             TimeSpan ts;
             string elapsedTime;
-            string path = @"/home/andrey/Downloads/help/ascii/hind_simplified.ply";
+            string path = @"/home/andrey/Downloads/help/ascii/bunny.ply";
             
             rmUselessVertices rm = new rmUselessVertices();
 
@@ -21,11 +21,10 @@ namespace MeshSimplification{
             Model figure = importer.Import(path);
             
             
-            
             stopWatch.Start();
 
             //Algorithm algorithm = new VertexCollapsingInRadius(figure, 0.1);
-            Algorithm algorithm = new EdgeContraction(figure, 180, true);
+            Algorithm algorithm = new EdgeContractionAngle(figure);
             
             Model simple = algorithm.GetSimplifiedModel();
             
