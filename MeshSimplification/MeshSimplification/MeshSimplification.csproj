@@ -106,6 +106,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Algorithms\Algorithm.cs" />
+        <Compile Include="Algorithms\Angles.cs" />
         <Compile Include="Algorithms\BoundBoxAABB.cs" />
         <Compile Include="Algorithms\BoundBoxOOB.cs" />
         <Compile Include="Algorithms\EdgeContractionAngle.cs" />
@@ -114,11 +115,14 @@
         <Compile Include="Algorithms\FaceContraction??.cs" />
         <Compile Include="Algorithms\VertexCollapsingInRadius.cs" />
         <Compile Include="makeUselessVertices.cs" />
+        <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+        <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Readers\Exporter\ExporterPly.cs" />
         <Compile Include="Readers\Importer\ImporterPly.cs" />
         <Compile Include="rmUselessVertices.cs" />
+        <Compile Include="Supportive\MassiveSimplification.cs" />
         <Compile Include="Types\Edge.cs" />
         <Compile Include="Types\Element.cs" />
         <Compile Include="Types\Face.cs" />
@@ -130,6 +134,100 @@
     <ItemGroup>
       <None Include="OpenCL.Net.dll.config" />
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="bin\Debug\Brahma.Agents.dll" />
+      <Content Include="bin\Debug\Brahma.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.AST.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.AST.pdb" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.AST.xml" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Core.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Core.pdb" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Extensions.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Extensions.pdb" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Extensions.xml" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.OpenCLParser.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Printer.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Printer.pdb" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Printer.xml" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Translator.dll" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Translator.pdb" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.Translator.xml" />
+      <Content Include="bin\Debug\Brahma.FSharp.OpenCL.TypeProvider.dll" />
+      <Content Include="bin\Debug\Brahma.Helpers.dll" />
+      <Content Include="bin\Debug\Brahma.OpenCL.dll" />
+      <Content Include="bin\Debug\Brahma.OpenCL.pdb" />
+      <Content Include="bin\Debug\Brahma.OpenCL.xml" />
+      <Content Include="bin\Debug\Brahma.pdb" />
+      <Content Include="bin\Debug\Brahma.xml" />
+      <Content Include="bin\Debug\FSharp.Core.dll" />
+      <Content Include="bin\Debug\FSharp.Core.xml" />
+      <Content Include="bin\Debug\FSharp.Quotations.Evaluator.dll" />
+      <Content Include="bin\Debug\FSharp.Quotations.Evaluator.pdb" />
+      <Content Include="bin\Debug\FSharpx.Collections.dll" />
+      <Content Include="bin\Debug\FSharpx.Collections.Experimental.dll" />
+      <Content Include="bin\Debug\MeshSimplification.exe" />
+      <Content Include="bin\Debug\MeshSimplification.pdb" />
+      <Content Include="bin\Debug\OpenCL.Net.dll" />
+      <Content Include="bin\Debug\W8A.P.C.X.dll" />
+      <Content Include="bin\Debug\YC.AST.Common.dll" />
+      <Content Include="bin\Debug\YC.FsYacc.dll" />
+      <Content Include="bin\Debug\YC.PrettyPrinter.dll" />
+      <Content Include="bin\Debug\YC.PrettyPrinter.xml" />
+      <Content Include="bin\Debug\YC.RNGLRCommon.dll" />
+      <Content Include="bin\Debug\YC.RNGLRParser.dll" />
+      <Content Include="bin\Release\Brahma.Agents.dll" />
+      <Content Include="bin\Release\Brahma.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.AST.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.AST.pdb" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.AST.xml" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Core.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Core.pdb" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Extensions.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Extensions.pdb" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Extensions.xml" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.OpenCLParser.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Printer.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Printer.pdb" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Printer.xml" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Translator.dll" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Translator.pdb" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.Translator.xml" />
+      <Content Include="bin\Release\Brahma.FSharp.OpenCL.TypeProvider.dll" />
+      <Content Include="bin\Release\Brahma.Helpers.dll" />
+      <Content Include="bin\Release\Brahma.OpenCL.dll" />
+      <Content Include="bin\Release\Brahma.OpenCL.pdb" />
+      <Content Include="bin\Release\Brahma.OpenCL.xml" />
+      <Content Include="bin\Release\Brahma.pdb" />
+      <Content Include="bin\Release\Brahma.xml" />
+      <Content Include="bin\Release\FSharp.Core.dll" />
+      <Content Include="bin\Release\FSharp.Core.xml" />
+      <Content Include="bin\Release\FSharp.Quotations.Evaluator.dll" />
+      <Content Include="bin\Release\FSharp.Quotations.Evaluator.pdb" />
+      <Content Include="bin\Release\FSharpx.Collections.dll" />
+      <Content Include="bin\Release\FSharpx.Collections.Experimental.dll" />
+      <Content Include="bin\Release\MeshSimplification.exe" />
+      <Content Include="bin\Release\MeshSimplification.pdb" />
+      <Content Include="bin\Release\OpenCL.Net.dll" />
+      <Content Include="bin\Release\W8A.P.C.X.dll" />
+      <Content Include="bin\Release\YC.AST.Common.dll" />
+      <Content Include="bin\Release\YC.FsYacc.dll" />
+      <Content Include="bin\Release\YC.PrettyPrinter.dll" />
+      <Content Include="bin\Release\YC.PrettyPrinter.xml" />
+      <Content Include="bin\Release\YC.RNGLRCommon.dll" />
+      <Content Include="bin\Release\YC.RNGLRParser.dll" />
+      <Content Include="obj\Debug\MeshSimplification.csproj.CopyComplete" />
+      <Content Include="obj\Debug\MeshSimplification.csproj.CoreCompileInputs.cache" />
+      <Content Include="obj\Debug\MeshSimplification.csproj.FileListAbsolute.txt" />
+      <Content Include="obj\Debug\MeshSimplification.csprojAssemblyReference.cache" />
+      <Content Include="obj\Debug\MeshSimplification.exe" />
+      <Content Include="obj\Debug\MeshSimplification.pdb" />
+      <Content Include="obj\Release\MeshSimplification.csproj.CopyComplete" />
+      <Content Include="obj\Release\MeshSimplification.csproj.CoreCompileInputs.cache" />
+      <Content Include="obj\Release\MeshSimplification.csproj.FileListAbsolute.txt" />
+      <Content Include="obj\Release\MeshSimplification.csprojAssemblyReference.cache" />
+      <Content Include="obj\Release\MeshSimplification.exe" />
+      <Content Include="obj\Release\MeshSimplification.pdb" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Import Project="..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets" Condition="Exists('..\packages\OpenCL.Net.2.2.9.0\build\net40\OpenCL.Net.targets')" />
