@@ -24,7 +24,7 @@ namespace MeshSimplification{
             stopWatch.Start();
 
             //Algorithm algorithm = new VertexCollapsingInRadius(figure, 0.1);
-            Algorithm algorithm = new EdgeContractionAngle(figure);
+            Algorithm algorithm = new EdgeContractionAngle(figure, 30);
             
             Model simple = algorithm.GetSimplifiedModel();
             

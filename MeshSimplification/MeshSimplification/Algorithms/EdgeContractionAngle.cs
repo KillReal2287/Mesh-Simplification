@@ -150,7 +150,7 @@ namespace MeshSimplification.Algorithms{
                     
                     vertices.Add(newVert);
 
-                    for (int i = iterator + 1; i < edges.Count; i++) {
+                    for (int i = iterator; i < edges.Count; i++) {
                         if (edges[i].Vertex1 == v1Index || edges[i].Vertex1 == v2Index)
                             edges[i] = new Edge(vertices.Count - 1, edges[i].Vertex2);
                         
