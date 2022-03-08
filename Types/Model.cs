@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+namespace MeshSimplification.Types;
 
-namespace MeshSimplification.Types {
-    public class Model {
-        readonly List<Mesh> meshes;
+public class Model {
+    public List<Mesh> Meshes { get; }
 
-        public Model() {
-            meshes = new List<Mesh>();
-        }
+    public Model() {
+        Meshes = new List<Mesh>();
+    }
 
-        public void AddMesh(Mesh mesh) {
-            meshes.Add(mesh);
-        }
+    public Model(Mesh mesh) {
+        Meshes = new List<Mesh> { mesh };
+    }
 
-        public List<Mesh> Meshes { get { return meshes; } }
+    public void AddMesh(Mesh mesh) {
+        Meshes.Add(mesh);
     }
 }

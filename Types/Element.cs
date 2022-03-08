@@ -1,36 +1,28 @@
 // Original idea by https://github.com/kovacsv/Online3DViewer
 
-using System.Collections.Generic;
+namespace MeshSimplification.Types;
 
-namespace MeshSimplification.Types {
-    public class Element {
-        private string name;
-        private int count;
-        readonly List<Property> properties;
+public class Element {
+    public string Name { get; }
+    public int Count { get; }
+    public List<Property> Properties { get; }
 
-        public Element(string name, int count) {
-            this.name = name;
-            this.count = count;
-            properties = new List<Property>();
+    public Element(string name, int count) {
+        Name = name;
+        Count = count;
+        Properties = new List<Property>();
+    }
+
+    public int PropertyIndex(string propertyName) {
+        for (int i = 0; i < Properties.Count; i++) {
+            if (Properties[i].Name.Equals(propertyName))
+                return i;
         }
 
-        public string Name { get { return name; } }
+        return -1;
+    }
 
-        public int Count { get { return count; } }
-        
-        public List<Property> Properties { get{ return properties; } }
-
-        public int PropertyIndex(string propertyName) {
-            for (int i = 0; i < properties.Count; i++) {
-                if (properties[i].Name.Equals(propertyName))
-                    return i;
-            }
-
-            return -1;
-        }
-
-        public void AddProperty(Property property) {
-            properties.Add(property);
-        }
+    public void AddProperty(Property property) {
+        Properties.Add(property);
     }
 }

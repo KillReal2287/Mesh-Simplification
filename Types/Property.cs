@@ -1,31 +1,24 @@
 // Original idea by https://github.com/kovacsv/Online3DViewer
 
-namespace MeshSimplification.Types {
-    public class Property {
-        private string name;
-        private bool isScalar;
-        private string countType;
-        private string elemType;
+namespace MeshSimplification.Types;
 
-        public Property(string name, bool isScalar, string elemType) {
-            this.name = name;
-            this.isScalar = isScalar;
-            this.elemType = elemType;
-        }
-        
-        public Property(string name, bool isScalar, string countType, string elemType) {
-            this.name = name;
-            this.isScalar = isScalar;
-            this.countType = countType;
-            this.elemType = elemType;
-        }
+public class Property {
+    public string Name { get; }
+    public bool IsScalar { get; }
+    public string CountType { get; }
+    public string ElemType { get; }
 
-        public string Name { get { return name; } }
-
-        public bool IsScalar { get { return isScalar; } }
-
-        public string CountType { get { return countType; } }
-
-        public string ElemType { get { return elemType; } }
+    public Property(string name, bool isScalar, string elemType) {
+        Name = name;
+        IsScalar = isScalar;
+        CountType = "";
+        ElemType = elemType;
+    }
+    
+    public Property(string name, bool isScalar, string countType, string elemType) {
+        Name = name;
+        IsScalar = isScalar;
+        CountType = countType;
+        ElemType = elemType;
     }
 }

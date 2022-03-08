@@ -1,15 +1,11 @@
-namespace MeshSimplification.Types {
-    public class Edge {
-        private int vertex1;
-        private int vertex2;
+namespace MeshSimplification.Types;
 
-        public Edge(int vertex1, int vertex2) {
-            this.vertex1 = vertex1;
-            this.vertex2 = vertex2;
-        }
-        
-        public int Vertex1 { get { return vertex1; } }
-        
-        public int Vertex2 { get { return vertex2; } }
+public class Edge {
+    public int Vertex1 { get; }
+    public int Vertex2 { get; }
+
+    public Edge(int vertex1, int vertex2) {
+        Vertex1 = vertex1;
+        Vertex2 = vertex2;
     }
 }

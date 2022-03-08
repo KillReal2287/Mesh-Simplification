@@ -1,17 +1,11 @@
-using System.Collections.Generic;
+namespace MeshSimplification.Types;
 
-namespace MeshSimplification.Types {
-    public class Face {
-        private int count;
-        readonly List<int> vertices;
+public class Face {
+    public int Count { get; }
+    public List<int> Vertices { get; }
 
-        public Face(int count, List<int> vertices) {
-            this.count = count;
-            this.vertices = vertices;
-        }
-
-        public int Count { get { return count; } }
-        
-        public List<int> Vertices { get { return vertices; } }
+    public Face(int count, List<int> vertices) {
+        Count = count;
+        Vertices = vertices;
     }
 }
