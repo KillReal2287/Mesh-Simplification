@@ -9,7 +9,7 @@ namespace MeshSimplification.FileIO.PLY;
 
 internal class PlyImport {
     private string _format;
-    
+
     internal Model Import(string fileName) {
         Model model = new Model();
 

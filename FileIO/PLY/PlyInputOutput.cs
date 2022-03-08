@@ -15,12 +15,16 @@ public class PlyInputOutput {
         return _import.Import(fileName);
     }
 
+    public Model Import(string fileName, string directory) {
+        string path = Path.Combine(directory, fileName);
+        return _import.Import(path);
+    }
+
     public void Export(string fileName, Model model, bool isBinary) {
         _export.Export(fileName, model, isBinary);
     }
     
     public void Export(string fileName, string directory, Model model, bool isBinary) {
-        /* RuntimeInformation.IsOSPlatform(OSPlatform.Windows) для определения ОС */
         string path = Path.Combine(directory, fileName);
         _export.Export(path, model, isBinary);
     }
