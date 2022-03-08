@@ -8,8 +8,10 @@ namespace MeshSimplification.Types {
             this.vertex2 = vertex2;
         }
         
-        public int Vertex1 { get { return vertex1; } }
-        
+        public int Vertex1 {
+            get { return vertex1; }
+        }
+
         public int Vertex2 { get { return vertex2; } }
     }
 }

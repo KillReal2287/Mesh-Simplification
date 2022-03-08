@@ -5,7 +5,7 @@ using MeshSimplification.Types;
 
 /*
  * this algorithm chooses which face should be deleted
- * based only on it square
+ * based only on its square
  */
 namespace MeshSimplification.Algorithms{
     class FaceContraction : Algorithm{ 
@@ -18,23 +18,28 @@ namespace MeshSimplification.Algorithms{
             this.ratio = ratio;
         }
         
+        public FaceContraction(Model model){
+            this.model = model;
+            ratio = 0.1;
+        }
+        
         public override Model GetSimplifiedModel(){
-            simplifiedModel = Simplify(model, ratio);
+            simplifiedModel = Simplify();
             return simplifiedModel;
         }
 
-        public Model Simplify(Model model, double ratio) {
+        public Model Simplify() {
             Model modelNew = new Model();
 
             foreach (Mesh mesh in model.Meshes)
-                modelNew.AddMesh(SimplifyMesh(mesh, ratio));
+                modelNew.AddMesh(SimplifyMesh(mesh));
 
             return modelNew;
         }
 
-        private Mesh SimplifyMesh(Mesh mesh, double ratio) {
+        private Mesh SimplifyMesh(Mesh mesh) {
             double area = FindBiggestArea(mesh);
-            Mesh deletedFaces = DeleteFace(mesh, ratio, area);
+            Mesh deletedFaces = DeleteFace(mesh, area);
             
             return deletedFaces;
         }
@@ -76,7 +81,7 @@ namespace MeshSimplification.Algorithms{
             return area;
         }
 
-        private static Mesh DeleteFace(Mesh mesh, double ratio, double area) {
+        private Mesh DeleteFace(Mesh mesh, double area) {
             List <Vertex> vertices = mesh.Vertices;
             List <Face> answer = new List<Face>();
             int before = mesh.Faces.Count;
