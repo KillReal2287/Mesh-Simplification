@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Xunit;
 using MeshSimplification.Types;
 
-namespace TestingProject.TestTypes; 
+namespace TestingProject; 
 
 public class TestTypes {
     [Fact]
