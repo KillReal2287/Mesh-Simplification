@@ -165,7 +165,7 @@ internal class PlyImport {
                             for (int j = 1; j <= count; j++)
                                 vertices.Add(Convert.ToInt32(words[j]));
 
-                            mesh.AddFace(new Face(count, vertices));
+                            mesh.AddFace(new Face(vertices));
                         }
                     }
                     break;

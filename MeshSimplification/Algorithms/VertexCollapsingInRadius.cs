@@ -82,7 +82,7 @@ namespace MeshSimplification.Algorithms{
                         List<int> ver = face.Vertices;
                         ver.Remove(v1);
                         ver.Add(v);
-                        simplifiedFaces.Add(new Face(ver.Count,ver));
+                        simplifiedFaces.Add(new Face(ver));
                     }
                 }
             }

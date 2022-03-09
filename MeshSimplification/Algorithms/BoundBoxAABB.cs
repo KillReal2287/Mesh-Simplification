@@ -63,23 +63,23 @@ namespace MeshSimplification.Algorithms {
             vertices.Add(ver6);
             vertices.Add(ver7);
             
-            faces.Add(new Face(3, new List<int> {0, 1, 2}));
-            faces.Add(new Face(3, new List<int> {0, 2, 3}));
+            faces.Add(new Face(new List<int> {0, 1, 2}));
+            faces.Add(new Face(new List<int> {0, 2, 3}));
             
-            faces.Add(new Face(3, new List<int> {0, 4, 5}));
-            faces.Add(new Face(3, new List<int> {0, 5, 1}));
+            faces.Add(new Face(new List<int> {0, 4, 5}));
+            faces.Add(new Face(new List<int> {0, 5, 1}));
             
-            faces.Add(new Face(3, new List<int> {7, 6, 5}));
-            faces.Add(new Face(3, new List<int> {7, 5, 4}));
+            faces.Add(new Face(new List<int> {7, 6, 5}));
+            faces.Add(new Face(new List<int> {7, 5, 4}));
             
-            faces.Add(new Face(3, new List<int> {1, 5, 6}));
-            faces.Add(new Face(3, new List<int> {1, 6, 2}));
+            faces.Add(new Face(new List<int> {1, 5, 6}));
+            faces.Add(new Face(new List<int> {1, 6, 2}));
             
-            faces.Add(new Face(3, new List<int> {7, 2, 6}));
-            faces.Add(new Face(3, new List<int> {7, 3, 2}));
+            faces.Add(new Face(new List<int> {7, 2, 6}));
+            faces.Add(new Face(new List<int> {7, 3, 2}));
             
-            faces.Add(new Face(3, new List<int> {7, 3, 4}));
-            faces.Add(new Face(3, new List<int> {0, 4, 3}));
+            faces.Add(new Face(new List<int> {7, 3, 4}));
+            faces.Add(new Face(new List<int> {0, 4, 3}));
 
             return new Mesh(vertices, new List<Vertex>(), faces, new List<Edge>());
         }
