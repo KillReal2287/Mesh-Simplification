@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace MeshSimplification.Types;
 
 public class Mesh {
