@@ -1,11 +1,11 @@
 namespace MeshSimplification.Types;
 
 public class Face {
-    public int Count { get; }
+    public int Count => Vertices.Count;
+    
     public List<int> Vertices { get; }
 
-    public Face(int count, List<int> vertices) {
-        Count = count;
+    public Face(List<int> vertices) {
         Vertices = vertices;
     }
 }
