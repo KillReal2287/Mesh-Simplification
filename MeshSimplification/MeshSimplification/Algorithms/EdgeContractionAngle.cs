@@ -132,11 +132,21 @@ namespace MeshSimplification.Algorithms{
 
                 double angleCosValue = CountAngle(normal1, normal2);
 
+                double angleValue = Math.Acos(angleCosValue);
+                angleValue *= 57.2958;
+
+                double trueAngle = Math.Abs(180 - angleValue);
+                angleCosValue = Math.Cos(trueAngle);
+                
                 angleCosValue = angleCosValue > 1 ? 1 : angleCosValue;
                 angleCosValue = angleCosValue < -1 ? -1 : angleCosValue;
+                
+                //Console.WriteLine("input: {0}, current: {1}", 
+                //    angleCosValueInput, angleCosValue);
 
-
-                if (angleCosValue.CompareTo(angleCosValueInput) >= 0) {
+                angleCosValue = (angleCosValue == 1) ? -1 : angleCosValue;
+                
+                if (angleCosValue > angleCosValueInput) {
                     v1Index = edge.Vertex1;
                     v2Index = edge.Vertex2;
 
@@ -148,16 +158,19 @@ namespace MeshSimplification.Algorithms{
 
                     faces.RemoveAll(x => EdgeInFace(edge, x));
                     
-                    vertices.Add(newVert);
+                    
 
+                    /*
                     for (int i = iterator; i < edges.Count; i++) {
                         if (edges[i].Vertex1 == v1Index || edges[i].Vertex1 == v2Index)
                             edges[i] = new Edge(vertices.Count - 1, edges[i].Vertex2);
                         
                         if (edges[i].Vertex2 == v1Index || edges[i].Vertex2 == v2Index)
                             edges[i] = new Edge(edges[i].Vertex1, vertices.Count - 1);
-                    }
-
+                    }*/
+                    
+                    vertices.Add(newVert);
+                    
                     for (int iter = 0; iter < faces.Count; iter++) {
                         if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
                             faces[iter].Vertices[0] = vertices.Count - 1;

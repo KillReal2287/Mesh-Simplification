@@ -11,7 +11,8 @@ namespace MeshSimplification{
             Stopwatch stopWatch = new Stopwatch();
             TimeSpan ts;
             string elapsedTime;
-            string path = @"/home/andrey/Downloads/help/ascii/bunny.ply";
+            //string path = @"/home/andrey/Downloads/help/check/aa.ply";
+            string path = @"/home/andrey/Downloads/help/ascii/helix.ply";
             
             rmUselessVertices rm = new rmUselessVertices();
 
@@ -28,16 +29,15 @@ namespace MeshSimplification{
             stopWatch.Start();
 
             //Algorithm algorithm = new VertexCollapsingInRadius(figure, 0.1);
-            //Algorithm algorithm = new EdgeContractionAngle(figure, 30);
-            MassiveSimplification massiveSimplification = new MassiveSimplification(path1, path2, path3);
-            //Model simple = algorithm.GetSimplifiedModel();
+            Algorithm algorithm = new EdgeContractionAngle(figure, 90);
+            Model simple = algorithm.GetSimplifiedModel();
             
             stopWatch.Stop();
 
             ts = stopWatch.Elapsed;
             elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             Console.WriteLine("Algorithm runtime: " + elapsedTime + "\n");
-            /*
+            
             
             stopWatch.Restart();
             rm.RemoveVertices(simple);
@@ -54,7 +54,7 @@ namespace MeshSimplification{
             ts = stopWatch.Elapsed;
             elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
             Console.WriteLine("Writing runtime: " + elapsedTime);
-            Console.WriteLine();*/
+            Console.WriteLine();
         }
     }
 }
