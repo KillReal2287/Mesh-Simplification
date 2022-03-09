@@ -22,12 +22,7 @@ public class Element {
     }
 
     public int PropertyIndex(string propertyName) {
-        for (int i = 0; i < Properties.Count; i++) {
-            if (Properties[i].Name.Equals(propertyName))
-                return i;
-        }
-
-        return -1;
+        return Properties.FindIndex(p => p.Name.Equals(propertyName));
     }
     
     public void AddProperty(Property property) => Properties.Add(property);
