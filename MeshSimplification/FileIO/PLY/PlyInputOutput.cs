@@ -1,3 +1,4 @@
+using System.IO;
 using MeshSimplification.Types;
 
 namespace MeshSimplification.FileIO.PLY;

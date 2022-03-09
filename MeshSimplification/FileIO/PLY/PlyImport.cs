@@ -1,8 +1,12 @@
 /* Original idea by https://github.com/kovacsv/Online3DViewer */
 
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Globalization;
+using System.IO;
+using System.Threading;
 using MeshSimplification.Types;
 
 namespace MeshSimplification.FileIO.PLY;
