@@ -21,8 +21,6 @@ public class Element {
 
         return -1;
     }
-
-    public void AddProperty(Property property) {
-        Properties.Add(property);
-    }
+    
+    public void AddProperty(Property property) => Properties.Add(property);
 }

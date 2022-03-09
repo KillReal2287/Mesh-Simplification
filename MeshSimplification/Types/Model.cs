@@ -11,7 +11,5 @@ public class Model {
         Meshes = new List<Mesh> { mesh };
     }
 
-    public void AddMesh(Mesh mesh) {
-        Meshes.Add(mesh);
-    }
+    public void AddMesh(Mesh mesh) => Meshes.Add(mesh);
 }

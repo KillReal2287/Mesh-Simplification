@@ -188,10 +188,7 @@ internal class PlyImport {
                     break;
                 }
         }
-
-        Model model = new Model();
-        model.AddMesh(mesh);
         
-        return model;
+        return new Model(mesh);
     }
 }
