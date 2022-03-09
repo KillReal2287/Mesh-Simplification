@@ -1,1 +1,9 @@
 /.idea/
+/MeshSimplification/bin/
+/MeshSimplification/obj/
+
+/TestingProject/bin/
+/TestingProject/obj/
+
+MeshSimplification.sln
+MeshSimplification.sln.DotSettings.user

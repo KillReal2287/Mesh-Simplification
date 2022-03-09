@@ -4,7 +4,15 @@ namespace MeshSimplification.Types;
 
 public class Element {
     public string Name { get; }
+    
+    /// <summary>
+    /// Count of the elements in a file
+    /// </summary>
     public int Count { get; }
+    
+    /// <summary>
+    /// Properties.Count is the count of additional properties for each element
+    /// </summary>
     public List<Property> Properties { get; }
 
     public Element(string name, int count) {
