@@ -77,7 +77,7 @@ internal class PlyImport {
                         }
                         else if (words.Length >= 3) {
                             elements[elements.Count - 1].Properties.
-                                Add(new Property(words[2], false, words[1]));
+                                Add(new Property(words[2], true, words[1]));
                         }
                         else
                             throw new DataException("Incorrect <property> line");
