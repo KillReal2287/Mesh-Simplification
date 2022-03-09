@@ -1,7 +1,6 @@
 /.idea
 /MeshSimplification/bin
-MeshSimplification/obj
-
+/MeshSimplification/obj
 /TestingProject/bin
 /TestingProject/obj
 
