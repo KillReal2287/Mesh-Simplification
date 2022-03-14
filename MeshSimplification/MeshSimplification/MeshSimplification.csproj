@@ -106,7 +106,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Algorithms\Algorithm.cs" />
-        <Compile Include="Algorithms\Angles.cs" />
         <Compile Include="Algorithms\BoundBoxAABB.cs" />
         <Compile Include="Algorithms\BoundBoxOOB.cs" />
         <Compile Include="Algorithms\EdgeContractionAngle.cs" />

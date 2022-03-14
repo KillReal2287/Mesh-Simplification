@@ -12,7 +12,7 @@ namespace MeshSimplification{
             TimeSpan ts;
             string elapsedTime;
             //string path = @"/home/andrey/Downloads/help/check/aa.ply";
-            string path = @"/home/andrey/Downloads/help/ascii/helix.ply";
+            string path = @"/home/andrey/Downloads/help/ascii/hind.ply";
             
             rmUselessVertices rm = new rmUselessVertices();
 
@@ -29,7 +29,7 @@ namespace MeshSimplification{
             stopWatch.Start();
 
             //Algorithm algorithm = new VertexCollapsingInRadius(figure, 0.1);
-            Algorithm algorithm = new EdgeContractionAngle(figure, 90);
+            Algorithm algorithm = new EdgeContractionAngle(figure, 60);
             Model simple = algorithm.GetSimplifiedModel();
             
             stopWatch.Stop();
