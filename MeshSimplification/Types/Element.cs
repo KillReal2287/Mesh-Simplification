@@ -1,7 +1,5 @@
 // Original idea by https://github.com/kovacsv/Online3DViewer
 
-using System.Collections.Generic;
-
 namespace MeshSimplification.Types;
 
 public class Element {

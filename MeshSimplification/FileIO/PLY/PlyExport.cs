@@ -13,16 +13,15 @@ internal class PlyExport {
                     /* WriteBinary in development */
                 }
                 else {
-                    using (StreamWriter writer =
-                           new StreamWriter(new FileStream(fileName, FileMode.Create), Encoding.ASCII)) {
-                        CultureInfo info = CultureInfo.CurrentCulture;
-                        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                    using StreamWriter writer =
+                        new StreamWriter(new FileStream(fileName, FileMode.Create), Encoding.ASCII);
+                    CultureInfo info = CultureInfo.CurrentCulture;
+                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
                     
-                        WriteHeaderAscii(writer, model, "ascii");
-                        WriteAscii(writer, model);
+                    WriteHeaderAscii(writer, model, "ascii");
+                    WriteAscii(writer, model);
                     
-                        Thread.CurrentThread.CurrentCulture = info;
-                    }
+                    Thread.CurrentThread.CurrentCulture = info;
                 }
             }
             catch (Exception e) {

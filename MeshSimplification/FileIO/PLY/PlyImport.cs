@@ -14,23 +14,22 @@ internal class PlyImport {
         Model model = new Model();
 
         try {
-            using (StreamReader reader = new StreamReader(fileName, Encoding.ASCII)) {
-                CultureInfo info = CultureInfo.CurrentCulture;
+            using StreamReader reader = new StreamReader(fileName, Encoding.ASCII);
+            CultureInfo info = CultureInfo.CurrentCulture;
 
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-                List<string> header = ReadHeader(reader);
-                List<Element> elems = ParseHeader(header);
+            List<string> header = ReadHeader(reader);
+            List<Element> elems = ParseHeader(header);
 
-                if (_format.Equals("ascii")) {
-                    model = ReadAscii(reader, elems);
-                }
-                else if (_format.Equals("binary_little_endian") || _format.Equals("binary_big_endian")) {
-                    /* ReadBinary in development */
-                }
-
-                Thread.CurrentThread.CurrentCulture = info;
+            if (_format.Equals("ascii")) {
+                model = ReadAscii(reader, elems);
             }
+            else if (_format.Equals("binary_little_endian") || _format.Equals("binary_big_endian")) {
+                /* ReadBinary in development */
+            }
+
+            Thread.CurrentThread.CurrentCulture = info;
         }
         catch (Exception e) {
             Console.Error.WriteLine("Reading file \"{0}\" failed: {1}", fileName, e.Message);
@@ -41,10 +40,11 @@ internal class PlyImport {
     
     private List<string> ReadHeader(StreamReader reader) {
         List<string> header = new List<string>();
-        string line;
+        string? line;
 
         while ((line = reader.ReadLine()) != null) {
-            header.Add(line);
+            if (!line.Equals(""))
+                header.Add(line);
             if (line.Equals("end_header"))
                 break;
         }
@@ -89,6 +89,7 @@ internal class PlyImport {
                         _format = words[1];
                         break;
                     
+                    case "":
                     case "ply":
                     case "comment":
                     case "end_header":
@@ -128,8 +129,13 @@ internal class PlyImport {
                 
                     bool hasNormals = !(nx == -1 || ny == -1 || nz == -1);
                     
-                    for (int i = 0; i < e.Count; i++) {
-                        string[] words = reader.ReadLine().Split(" ");
+                    for (int i = 0; i < e.Count;) {
+                        string? line = reader.ReadLine();
+                        
+                        if (line is null) throw new DataException("Missing vertices in file");
+                        if (line is "") continue;
+
+                        string[] words = line.Split(" ");
 
                         if (words.Length >= e.Properties.Count) {
                             double coordinateX = Convert.ToDouble(words[x]);
@@ -148,12 +154,19 @@ internal class PlyImport {
                                 mesh.AddNormal(n);
                             }
                         }
+                        
+                        i++;
                     }
                     break;
                 }
                 case "face": {
-                    for (int i = 0; i < e.Count; i++) {
-                        string[] words = reader.ReadLine().Split(" ");
+                    for (int i = 0; i < e.Count;) {
+                        string? line = reader.ReadLine();
+                        
+                        if (line is null) throw new DataException("Missing faces in file");
+                        if (line is "") continue;
+                        
+                        string[] words = line.Split(" ");
 
                         if (words.Length >= e.Properties.Count && words.Length >= 1) {
                             List<int> vertices = new List<int>();
@@ -167,26 +180,42 @@ internal class PlyImport {
 
                             mesh.AddFace(new Face(vertices));
                         }
+                        
+                        i++;
                     }
                     break;
                 }
                 case "edge": {
-                    for (int j = 0; j < e.Count; j++) {
-                        string[] words = reader.ReadLine().Split(" ");
+                    for (int i = 0; i < e.Count; i++) {
+                        string? line = reader.ReadLine();
+                        
+                        if (line is null) throw new DataException("Missing edges in file");
+                        if (line is "") continue;
+                        
+                        string[] words = line.Split(" ");
                         
                         if (words.Length >= e.Properties.Count && words.Length >= 2) {
                             int vertex1 = Convert.ToInt32(words[0]);
                             int vertex2 = Convert.ToInt32(words[1]);
                             mesh.AddEdge(new Edge(vertex1, vertex2));
                         }
+                        
+                        i++;
                     }
                     break;
                 }
-                default:
-                    for (int i = 0; i < e.Count; i++)
-                        reader.ReadLine();
+                default: {
+                    for (int i = 0; i < e.Count;) {
+                        string? line = reader.ReadLine();
+                        
+                        if (line is null) throw new DataException("Missing property's data in file");
+                        if (line is "") continue;
+                        
+                        i++;
+                    }
                     break;
                 }
+            }
         }
         
         return new Model(mesh);
