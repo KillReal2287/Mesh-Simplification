@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Security.AccessControl;
 using MeshSimplification.Types;
 
 /*
@@ -23,7 +22,7 @@ namespace MeshSimplification.Algorithms{
         
         public EdgeContractionAngle(Model model){
             this.model = model;
-            ratio = 5;
+            ratio = 40;
         }
         
         public override Model GetSimplifiedModel(){
@@ -88,12 +87,6 @@ namespace MeshSimplification.Algorithms{
             return scalar / length;
         }
 
-        private double LengthBetweenVertices(Vertex vertex1, Vertex vertex2){
-            return Math.Sqrt((vertex1.X - vertex2.X) * (vertex1.X - vertex2.X) +
-                             (vertex1.Y - vertex2.Y) * (vertex1.Y - vertex2.Y) +
-                             (vertex1.Z - vertex2.Z) * (vertex1.Z - vertex2.Z));
-        }
-
         private Vector3 GetNormal(Mesh mesh, Face face){
             Vector3 vector3 = new Vector3();
 
@@ -123,42 +116,74 @@ namespace MeshSimplification.Algorithms{
             int v1Index, v2Index;
 
             int iterator = 0;
+
+            int simpleFaces = 1;
             
-            while (iterator < edges.Count) {
-                Edge edge;
-                try {
-                    edge = edges[iterator];
+            while (simpleFaces > 0) {
+                simpleFaces = 0;
+                foreach (Edge edge in edges) {
+                    List<Face> facesFounded = faces.FindAll(face => EdgeInFace(edge, face));
+                    if (facesFounded.Count != 2) {
+                        iterator += 1;
+                        continue;
+                    }
+                    
+                    Vector3 normal1 = GetNormal(mesh, facesFounded[0]);
+                    Vector3 normal2 = GetNormal(mesh, facesFounded[1]);
+
+
+                    double angleCosValueInput = Math.Cos(ratio * 0.01745); 
+
+                    double angleCosValue = CountAngle(normal1, normal2);
+
+                    double angleValue = Math.Acos(angleCosValue) * 57.2958;
+
+                    double trueAngleValue = Math.Abs(180 - angleValue);
+                    double trueAngleCosValue = Math.Cos(trueAngleValue * 0.01745);
+                    
+                    //Console.WriteLine(trueAngleValue);
+                    
+                    if (trueAngleCosValue > angleCosValueInput) {
+                        v1Index = edge.Vertex1;
+                        v2Index = edge.Vertex2;
+
+                        Vertex v1 = vertices[v1Index];
+                        Vertex v2 = vertices[v2Index];
+
+                        Vertex newVert = new Vertex((v1.X + v2.X) / 2,
+                            (v1.Y + v2.Y) / 2, (v1.Z + v2.Z) / 2);
+        
+                        simpleFaces += faces.RemoveAll(x => EdgeInFace(edge, x));
+
+                        vertices.Add(newVert);
+
+                        for (int iter = 0; iter < faces.Count; iter++) {
+                            if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
+                                faces[iter].Vertices[0] = vertices.Count - 1;
+                        
+                            if (faces[iter].Vertices[1] == v1Index || faces[iter].Vertices[1] == v2Index)
+                                faces[iter].Vertices[1] = vertices.Count - 1;
+                        
+                            if (faces[iter].Vertices[2] == v1Index || faces[iter].Vertices[2] == v2Index)
+                                faces[iter].Vertices[2] = vertices.Count - 1;
+                        }
+                    }
                 }
-                catch (Exception e) {
-                    edge = edges[edges.Count - 1];
-                    iterator = edges.Count;
-                }
 
-                
-                List<Face> facesFounded = faces.FindAll(face => EdgeInFace(edge, face));
-                if (facesFounded.Count != 2) {
-                    iterator += 1;
-                    continue;
-                }
-                
-                
-                int notInEdge1 = facesFounded[0].Vertices.FindLast(x => x != edge.Vertex1 && x != edge.Vertex2);
-                int notInEdge2 = facesFounded[1].Vertices.FindLast(x => x != edge.Vertex1 && x != edge.Vertex2);
+                edges = GetEdges(mesh); 
+            }
+            /*
+            int notInEdge1 = facesFounded[0].Vertices.FindLast(x => x != edge.Vertex1 && x != edge.Vertex2);
+            int notInEdge2 = facesFounded[1].Vertices.FindLast(x => x != edge.Vertex1 && x != edge.Vertex2);
 
-                /*
-                Vertex vertex1 = mesh.Vertices[notInEdge1];
-                Vertex vertex2 = mesh.Vertices[notInEdge2];
+            /*
+            Vertex vertex1 = mesh.Vertices[notInEdge1];
+            Vertex vertex2 = mesh.Vertices[notInEdge2];
+            
+            double lengthBetween = LengthBetweenVertices(vertex1, vertex2);
+            */
                 
-                double lengthBetween = LengthBetweenVertices(vertex1, vertex2);
-                */
-                
-                Vector3 normal1 = GetNormal(mesh, facesFounded[0]);
-                Vector3 normal2 = GetNormal(mesh, facesFounded[1]);
 
-
-                double angleCosValueInput = Math.Cos(ratio * 0.01745); 
-
-                double angleCosValue = CountAngle(normal1, normal2);
 
                 /*
                 double angleValue = Math.Acos(angleCosValue);
@@ -167,49 +192,6 @@ namespace MeshSimplification.Algorithms{
                 double trueAngle = Math.Abs(180 - angleValue);
                 angleCosValue = Math.Cos(trueAngle);
                 */
-                angleCosValue = angleCosValue > 1 ? 1 : angleCosValue;
-
-                //Console.WriteLine("input: {0}, current: {1}", 
-                //    angleCosValueInput, angleCosValue);
-
-                if (angleCosValue > angleCosValueInput) {
-                    v1Index = edge.Vertex1;
-                    v2Index = edge.Vertex2;
-
-                    Vertex v1 = vertices[v1Index];
-                    Vertex v2 = vertices[v2Index];
-
-                    Vertex newVert = new Vertex((v1.X + v2.X) / 2,
-                        (v1.Y + v2.Y) / 2, (v1.Z + v2.Z) / 2);
-
-                    faces.RemoveAll(x => EdgeInFace(edge, x));
-                    
-                    edges.RemoveAll(x => 
-                        IfEdge(new Edge(notInEdge1, v1Index), edges) ||
-                        IfEdge(new Edge(notInEdge1, v2Index), edges) ||
-                        IfEdge(new Edge(notInEdge2, v1Index), edges) ||
-                        IfEdge(new Edge(notInEdge2, v2Index), edges));
-                    
-                    vertices.Add(newVert);
-                    
-                    edges.Add(new Edge(notInEdge1, vertices.Count - 1));
-                    edges.Add(new Edge(notInEdge2, vertices.Count - 1));
-
-                    for (int iter = 0; iter < faces.Count; iter++) {
-                        if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
-                            faces[iter].Vertices[0] = vertices.Count - 1;
-                        
-                        if (faces[iter].Vertices[1] == v1Index || faces[iter].Vertices[1] == v2Index)
-                            faces[iter].Vertices[1] = vertices.Count - 1;
-                        
-                        if (faces[iter].Vertices[2] == v1Index || faces[iter].Vertices[2] == v2Index)
-                            faces[iter].Vertices[2] = vertices.Count - 1;
-                    }
-                }
-                else
-                    iterator += 1;
-            }
-
 
             Console.WriteLine("Stat:");
             Console.WriteLine("faces before: {0}", before);

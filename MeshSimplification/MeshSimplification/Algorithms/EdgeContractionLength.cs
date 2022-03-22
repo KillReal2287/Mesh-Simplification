@@ -14,7 +14,8 @@ namespace MeshSimplification.Algorithms {
         private Model simplifiedModel;
         private readonly double ratio;
 
-        private double longest = double.MinValue;
+        private double length = double.MinValue;
+        private List<double> allLength = new List<double>();
 
         public EdgeContractionLength(Model model, double ratio){
             this.model = model;
@@ -47,29 +48,25 @@ namespace MeshSimplification.Algorithms {
             List<Edge> answer = new List<Edge>();
 
             foreach (Face f in mesh.Faces) {
-                List<double> length = new List<double>();
                 
                 if (!IfEdge(new Edge(f.Vertices[0], f.Vertices[1]), answer)) {
                     answer.Add(new Edge(f.Vertices[0], f.Vertices[1])); 
-                    length.Add(EdgeLength(mesh, answer[answer.Count - 1]));
+                    allLength.Add(EdgeLength(mesh, answer[answer.Count - 1]));
                 }
                 
                 if (!IfEdge(new Edge(f.Vertices[0], f.Vertices[2]), answer)) {
                     answer.Add(new Edge(f.Vertices[0], f.Vertices[2]));
-                    length.Add(EdgeLength(mesh, answer[answer.Count - 1]));
-
+                    allLength.Add(EdgeLength(mesh, answer[answer.Count - 1]));
                 }
                 
                 if (!IfEdge(new Edge(f.Vertices[1], f.Vertices[2]), answer)) {
                     answer.Add(new Edge(f.Vertices[1], f.Vertices[2]));
-                    length.Add(EdgeLength(mesh, answer[answer.Count - 1]));
-                }
-
-                if (length.Count > 0) {
-                    length.Sort();                    
-                    longest = length[length.Count - 1] > longest ? length[length.Count - 1] : longest;                    
+                    allLength.Add(EdgeLength(mesh, answer[answer.Count - 1]));
                 }
             }
+            allLength.Sort();
+            length = allLength[allLength.Count - 1];
+            
             return answer;
         }
 
@@ -114,7 +111,7 @@ namespace MeshSimplification.Algorithms {
             List <Face> faces = mesh.Faces;
             int before = mesh.Faces.Count;
             int v1Index, v2Index;
-            
+
             int newVertices = 0;
             
             int iterator = 0;
@@ -122,7 +119,7 @@ namespace MeshSimplification.Algorithms {
             while (iterator != edges.Count) {
                 Edge edge = edges[iterator];
 
-                if (EdgeLength(mesh, edge) < ratio * longest) {
+                if (EdgeLength(mesh, edge) < ratio * length) {
                     v1Index = edge.Vertex1;
                     v2Index = edge.Vertex2;
                     
@@ -150,7 +147,7 @@ namespace MeshSimplification.Algorithms {
                 }
                 iterator += 1;
             }
-            //Console.WriteLine("New vertices: {0}", newVertices);
+            Console.WriteLine("New vertices: {0}", newVertices);
 
             Console.WriteLine("Stat:");
             Console.WriteLine("faces before: {0}", before);
