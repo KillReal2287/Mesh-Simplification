@@ -9,8 +9,14 @@ namespace MeshSimplification{
          * and tries to find the index
          */
         public void RemoveVertices(Model model){
-            foreach (Mesh mesh in model.Meshes) { 
-                removeInMesh(mesh);
+            foreach (Mesh mesh in model.Meshes) {
+                int deleted = removeInMesh(mesh);
+                int total = deleted;
+                while (deleted > 0) {
+                    deleted = removeInMesh(mesh);
+                    total += deleted;
+                }
+                Console.WriteLine("deleted vertices in mesh: {0}", total);
             }
         }
 
@@ -18,26 +24,24 @@ namespace MeshSimplification{
          * if you remove the comments you will see which
          * indices are removed and the coordinates of those vertices
          */
-        private static void removeInMesh(Mesh mesh){
-            int before = mesh.Vertices.Count;
-            int after;
+        private static int removeInMesh(Mesh mesh){
             int deleted = 0;
 
-            int i = 0;
-            while (i < mesh.Vertices.Count) {
-                if (!checkVertice(mesh, i - deleted)) {
+            int index = 0;
+            while (index < mesh.Vertices.Count) {
+                if (!checkVertice(mesh, index - deleted)) {
                     //Console.Write("{0}, {1}, {2} -- ", mesh.Vertices[i - deleted].X, mesh.Vertices[i - deleted].Y, mesh.Vertices[i - deleted].Z);
-                    changeIndex(mesh, i - deleted);
+                    changeIndex(mesh, index - deleted);
                     //Console.WriteLine(i);
                     deleted += 1;
                     continue;
                 }
-                i += 1;
+                index += 1;
             }
-            after = mesh.Vertices.Count;
-            
-            Console.WriteLine("deleted vertices in mesh: {0}", before - after);
+
+            return deleted;
         }
+        
 
         private static bool checkVertice(Mesh mesh, int index){
             int indexDel = index < 0 ? 0 : index;
@@ -52,8 +56,6 @@ namespace MeshSimplification{
             int indexDel = index < 0 ? 0 : index;
             
             mesh.Vertices.RemoveAt(indexDel);
-
-            
             
             foreach (Face face in mesh.Faces) {
                 face.Vertices[0] = face.Vertices[0] > indexDel ? face.Vertices[0] - 1 : face.Vertices[0];

@@ -13,7 +13,8 @@ namespace MeshSimplification{
             string elapsedTime;
             //string path = @"/home/andrey/Downloads/help/check/aa.ply";
             //string path = @"/home/andrey/Downloads/help/ascii/bunny_simplified.ply";
-            string path = @"/home/andrey/Downloads/help/ascii/helix_simplified_simplified_simplified.ply";
+            //_simplified    for copy paste
+            string path = @"/home/andrey/Downloads/help/ascii/bethoven.ply";
             
             rmUselessVertices rm = new rmUselessVertices();
 
@@ -30,7 +31,8 @@ namespace MeshSimplification{
             stopWatch.Start();
 
             //Algorithm algorithm = new VertexCollapsingInRadius(figure);
-            Algorithm algorithm = new EdgeContractionAngle(figure, 170);
+            Algorithm algorithm = new EdgeContractionAngle(figure, 150);
+            //Algorithm algorithm = new EdgeContractionLength(figure, 0.7);
             Model simple = algorithm.GetSimplifiedModel();
             
             stopWatch.Stop();

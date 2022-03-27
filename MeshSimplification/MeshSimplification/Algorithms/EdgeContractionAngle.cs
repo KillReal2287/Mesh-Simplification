@@ -15,6 +15,11 @@ namespace MeshSimplification.Algorithms{
         private Model simplifiedModel;
         private readonly double ratio;
 
+        private double ratioMin;
+        private double ratioMax;
+
+        private List<int> deleted = new List<int>();
+
         public EdgeContractionAngle(Model model, double ratio){
             this.model = model;
             this.ratio = ratio;
@@ -22,15 +27,36 @@ namespace MeshSimplification.Algorithms{
         
         public EdgeContractionAngle(Model model){
             this.model = model;
-            ratio = 40;
+            ratio = 150;
         }
         
         public override Model GetSimplifiedModel(){
+            getRatioMinMax();
             simplifiedModel = SimplifyAngle();
+            
             return simplifiedModel;
         }
         
         //general methods   ↓↓↓
+        private double ConvertToRadians(double angle){
+            return (Math.PI / 180) * angle;
+        }
+        
+        private double ConvertToDegrees(double radians){
+            return (180 / Math.PI) * radians;
+        }
+
+        private void getRatioMinMax(){
+            if (Math.Cos(ConvertToRadians(ratio)) < 0) {
+                ratioMax = ratio;
+                ratioMin = 180 - ratio;
+            }
+            else {
+                ratioMax = 180 - ratio;
+                ratioMin = ratio;
+            }
+        }
+
         private bool IfEdge(Edge edge, List<Edge> edges) {
             return edges.Exists(x =>
                 x.Vertex1 == edge.Vertex1 && x.Vertex2 == edge.Vertex2 ||
@@ -58,7 +84,6 @@ namespace MeshSimplification.Algorithms{
             Model modelNew = new Model();
 
             foreach (Mesh mesh in model.Meshes) {
-                //CheckThisMesh(mesh);
                 Mesh simple = new Mesh(new List<Vertex>(mesh.Vertices), new List<Vertex>(mesh.Normals),
                     new List<Face>(mesh.Faces), new List<Edge>(mesh.Edges));
                 modelNew.AddMesh(SimplifyMeshAngle(simple));
@@ -100,7 +125,6 @@ namespace MeshSimplification.Algorithms{
             vector3.Z -= (float) ((mesh.Vertices[face.Vertices[1]].Y - mesh.Vertices[face.Vertices[0]].Y) *
                                   (mesh.Vertices[face.Vertices[2]].X - mesh.Vertices[face.Vertices[0]].X));
             
-            //Console.WriteLine("x: {0}, y: {1}, z: {2}", vector3.X, vector3.Y, vector3.Z);
             return vector3;
         }
         
@@ -111,32 +135,41 @@ namespace MeshSimplification.Algorithms{
             int v1Index, v2Index;
             
 
-            double angleCosValueInput;
+            double angleCosValueInputMin;
+            double angleCosValueInputMax;
+            
             double angleCosValue;
             double angleValue;
             double trueAngleCosValue;
 
-
             foreach (Edge edge in edges) {
-                List<Face> facesFounded = faces.FindAll(face => face.Vertices.Contains(edge.Vertex1) && 
-                                                                face.Vertices.Contains(edge.Vertex2));
-
-                if (facesFounded.Count != 2)
+                if (deleted.Exists(x => x == edge.Vertex1 || x == edge.Vertex2))
                     continue;
 
+                List<Face> facesFounded = faces.FindAll(face => face.Vertices.Contains(edge.Vertex1) && 
+                                                                face.Vertices.Contains(edge.Vertex2));
+                
+                if (facesFounded.Count != 2) {
+                    continue;
+                }
+                
                 Vector3 normal1 = GetNormal(mesh, facesFounded[0]);
                 Vector3 normal2 = GetNormal(mesh, facesFounded[1]);
-
-
-                angleCosValueInput = Math.Cos(ratio * 0.01745); //convert to radians and take cos
+                
+                angleCosValueInputMin = Math.Cos(ConvertToRadians(ratioMin));
+                angleCosValueInputMax = Math.Cos(ConvertToRadians(ratioMax));
 
                 angleCosValue = CountAngle(normal1, normal2); //get cos value of angle between normals
 
                 angleValue = Math.Abs(Math.PI - Math.Acos(angleCosValue)); //getting radians, then get real angle
 
                 trueAngleCosValue = Math.Cos(angleValue); //taking cos of radian value of real angle
-
-                if (trueAngleCosValue > angleCosValueInput) { //we want to save obtuse angles 
+                
+                /*
+                 * if input value >90 then we remove angles in range [180 - a; a]
+                 * value <90 then range will be [a; 180 - a]
+                 */
+                if (angleCosValueInputMax < trueAngleCosValue && trueAngleCosValue < angleCosValueInputMin) {
                     v1Index = edge.Vertex1;
                     v2Index = edge.Vertex2;
 
@@ -162,6 +195,8 @@ namespace MeshSimplification.Algorithms{
                         if (faces[iter].Vertices[2] == v1Index || faces[iter].Vertices[2] == v2Index)
                             faces[iter].Vertices[2] = vertices.Count - 1;
                     }
+                    deleted.Add(v1Index);
+                    deleted.Add(v2Index);
                 }
             }
 

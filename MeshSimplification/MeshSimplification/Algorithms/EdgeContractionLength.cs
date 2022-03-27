@@ -33,11 +33,6 @@ namespace MeshSimplification.Algorithms {
         }
 
         //general methods   ↓↓↓
-        private bool EdgeInFace(Edge edge, Face face) {
-            return face.Vertices.Exists(x => x == edge.Vertex1) && 
-                   face.Vertices.Exists(x => x == edge.Vertex2);
-        }
-        
         private bool IfEdge(Edge edge, List<Edge> edges) {
             return edges.Exists(x =>
                 x.Vertex1 == edge.Vertex1 && x.Vertex2 == edge.Vertex2 ||
@@ -46,9 +41,8 @@ namespace MeshSimplification.Algorithms {
         
         private List<Edge> GetEdges(Mesh mesh){
             List<Edge> answer = new List<Edge>();
-
+            
             foreach (Face f in mesh.Faces) {
-                
                 if (!IfEdge(new Edge(f.Vertices[0], f.Vertices[1]), answer)) {
                     answer.Add(new Edge(f.Vertices[0], f.Vertices[1])); 
                     allLength.Add(EdgeLength(mesh, answer[answer.Count - 1]));
@@ -112,13 +106,8 @@ namespace MeshSimplification.Algorithms {
             int before = mesh.Faces.Count;
             int v1Index, v2Index;
 
-            int newVertices = 0;
-            
-            int iterator = 0;
-            
-            while (iterator != edges.Count) {
-                Edge edge = edges[iterator];
 
+            foreach (Edge edge in edges) {
                 if (EdgeLength(mesh, edge) < ratio * length) {
                     v1Index = edge.Vertex1;
                     v2Index = edge.Vertex2;
@@ -129,11 +118,11 @@ namespace MeshSimplification.Algorithms {
                     Vertex newVert = new Vertex((v1.X + v2.X) / 2,
                         (v1.Y + v2.Y) / 2, (v1.Z + v2.Z) / 2);
                     
-                    faces.RemoveAll(x => EdgeInFace(edge, x));
+                    faces.RemoveAll(x => x.Vertices.Contains(edge.Vertex1) &&
+                                                    x.Vertices.Contains(edge.Vertex2));
 
                     vertices.Add(newVert);
-
-                    newVertices += 1;
+                    
                     for (int iter = 0; iter < faces.Count; iter++) {
                         if (faces[iter].Vertices[0] == v1Index || faces[iter].Vertices[0] == v2Index)
                             faces[iter].Vertices[0] = vertices.Count - 1;
@@ -145,9 +134,7 @@ namespace MeshSimplification.Algorithms {
                             faces[iter].Vertices[2] = vertices.Count - 1;
                     }
                 }
-                iterator += 1;
             }
-            Console.WriteLine("New vertices: {0}", newVertices);
 
             Console.WriteLine("Stat:");
             Console.WriteLine("faces before: {0}", before);
